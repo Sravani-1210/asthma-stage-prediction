@@ -1,10 +1,11 @@
 import streamlit as st
 import random
+import time
 
 # Page Config
 st.set_page_config(page_title="Asthma Detection", layout="centered")
 
-# Background Style
+# Background + Style
 st.markdown("""
 <style>
 .stApp {
@@ -12,7 +13,7 @@ st.markdown("""
 }
 .big-title {
     text-align: center;
-    font-size: 40px;
+    font-size: 48px;
     font-weight: bold;
     color: #2c3e50;
 }
@@ -21,27 +22,35 @@ st.markdown("""
     padding: 20px;
     border-radius: 12px;
     margin-top: 20px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 6px 15px rgba(0,0,0,0.15);
 }
 </style>
 """, unsafe_allow_html=True)
 
-# Title
-st.markdown('<p class="big-title">🫁 Asthma Stage Prediction System</p>', unsafe_allow_html=True)
+# Logo + Title
+st.markdown("<h1 style='text-align:center;'>🫁 Asthma Stage Prediction System</h1>", unsafe_allow_html=True)
 
 st.write("Upload cough or breathing audio to predict asthma stage")
 
-# Upload
+# Upload Section Title
+st.markdown("### 📤 Upload Audio")
+
+# Upload File
 audio_file = st.file_uploader("Upload Audio File", type=["wav", "mp3"])
 
 if audio_file is not None:
 
     st.audio(audio_file)
 
+    # Loading Spinner
+    with st.spinner("Analyzing audio..."):
+        time.sleep(2)
+
     # Demo Prediction
     stage = random.choice(["Pre-Asthma", "Post-Asthma", "Stable"])
+    confidence = random.randint(80, 98)
 
-    # Severity
+    # Severity Logic
     if stage == "Pre-Asthma":
         severity = "High Risk"
         color = "#f8d7da"
@@ -52,16 +61,21 @@ if audio_file is not None:
         severity = "Low Risk"
         color = "#d4edda"
 
-    # Result Box
+    # Result Card
     st.markdown(f"""
     <div class="section" style="background-color:{color}">
         <h3>Prediction Result</h3>
         <b>Stage:</b> {stage}<br>
-        <b>Severity:</b> {severity}
+        <b>Severity:</b> {severity}<br>
+        <b>Confidence:</b> {confidence}%
     </div>
     """, unsafe_allow_html=True)
 
-    # Columns Layout
+    # Spacing
+    st.write("")
+    st.write("")
+
+    # Columns
     col1, col2 = st.columns(2)
 
     # Precautions
